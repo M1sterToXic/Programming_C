@@ -12,6 +12,8 @@ int main()
 	{
 		b = ((a * 1.8) + 32);
 		printf("b = %f\n", b);
+
+		
 	}
 	else if (ch == 'f' || ch == 'F')
 	{
