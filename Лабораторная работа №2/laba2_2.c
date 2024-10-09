@@ -16,7 +16,7 @@ int main(){
 }
 	else
 {
-		printf("ЖОК");
+		printf("Loss");
 }
 
 
