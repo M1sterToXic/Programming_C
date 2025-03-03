@@ -1,5 +1,5 @@
 all:
 	gcc main.c func.c -o laba_10
-
+	./laba_10
 claen:
-	rm -R laba_10
+	rm -rf laba_10
