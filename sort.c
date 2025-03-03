@@ -1,3 +1,4 @@
+//comment 2
 //comment
 #include <stdio.h>
 #include <time.h>
