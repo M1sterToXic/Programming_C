@@ -315,25 +315,29 @@ int main() {
 #include <stdlib.h>
 #include <string.h>
 
-void ex5_cleanup_handler(void* arg) {
-    printf("Cleanup handler: Thread %d is being canceled\n", *(int*)arg);
+void cleanup_handler(void* arg) {
+    int id = *(int*)arg;
+    printf("Thread %d: cleaning up before termination\n", id);
 }
 
 void* ex5_thread_func(void* arg) {
     int id = *(int*)arg;
-    pthread_cleanup_push(ex5_cleanup_handler, arg);
+    
+    pthread_cleanup_push(cleanup_handler, arg);
     
     for (int i = 0; i < 5; i++) {
+        // This is a cancellation point (sleep)
         printf("Thread %d: line %d\n", id, i);
         sleep(1);
     }
+
+    pthread_cleanup_pop(1);
     
-    pthread_cleanup_pop(0);
     return NULL;
 }
 
 void exercise5() {
-    printf("\n=== Exercise 5: Cleanup handlers ===\n");
+    printf("\n=== Exercise 5: Thread cancellation with cleanup ===\n");
     pthread_t threads[4];
     int ids[] = {1, 2, 3, 4};
     
@@ -348,13 +352,10 @@ void exercise5() {
     }
     
     printf("Main thread: all child threads canceled\n");
-}
 
-void* sleep_sort(void* arg) {
-    int value = *(int*)arg;
-    sleep(value);
-    printf("%d ", value);
-    return NULL;
+    for (int i = 0; i < 4; i++) {
+        pthread_join(threads[i], NULL);
+    }
 }
 
 int main() {
@@ -399,7 +400,8 @@ int main() {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/5790948f-96e1-46e1-bd41-1982d9afd2c3)
+![image](https://github.com/user-attachments/assets/dc68ee12-5ced-4357-bd5f-b8e0e3813e54)
+
 
 
 6.	Реализовать простой Sleepsort
